@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGAP.web.Server", "BGAP.web\Server\BGAP.web.Server.csproj", "{473E2D1E-A127-4D2D-9A95-47B7F6BD41A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGAP.web.Server", "BGAP.web\Server\BGAP.web.Server.csproj", "{473E2D1E-A127-4D2D-9A95-47B7F6BD41A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGAP.web.Client", "BGAP.web\Client\BGAP.web.Client.csproj", "{A90996A3-E937-4724-B172-32E4E87E2E9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGAP.web.Client", "BGAP.web\Client\BGAP.web.Client.csproj", "{A90996A3-E937-4724-B172-32E4E87E2E9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGAP.web.Shared", "BGAP.web\Shared\BGAP.web.Shared.csproj", "{B32A3223-CA7E-4B17-91D3-9645B17F058C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BGAP.web.Shared", "BGAP.web\Shared\BGAP.web.Shared.csproj", "{B32A3223-CA7E-4B17-91D3-9645B17F058C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
