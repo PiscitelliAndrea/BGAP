@@ -22,7 +22,7 @@ namespace BGAP.web.Client.Pages
 
         protected List<Tile> tiles = new List<Tile>();
         protected Tile tile = new Tile();
-        protected int NumOfRows = 2;
+        protected int NumOfRows = 4;
         protected TimeSpan ElapsedTime = TimeSpan.FromMilliseconds(0);
 
         #endregion

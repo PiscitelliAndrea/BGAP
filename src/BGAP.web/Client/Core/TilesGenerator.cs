@@ -5,8 +5,18 @@ using static BGAP.web.Client.Core.Enums;
 
 namespace BGAP.web.Client.Core
 {
+
+
     public class TilesGenerator
     {
+        #region Private Constants
+
+        private const int MINNUMOFCOLUMNS = 3;
+        private const int DEFAULTNUMOFCOLUMNS = 3;
+        private const int MAXNUMOFCOLUMNS = 6;
+
+        #endregion
+
         #region Private Properties
 
         private int NumOfColumns = 0;
@@ -23,19 +33,28 @@ namespace BGAP.web.Client.Core
 
         #region Public Methods
 
-        public List<Tile> GenerateTiles(int numOfColumns = 4)
+        /// <summary>
+        /// Generates all the tiles of the game.
+        /// An empty tile is added in the last position
+        /// </summary>
+        /// <param name="numOfColumns"></param>
+        /// <returns></returns>
+        public List<Tile> GenerateTiles(int inputNumOfColumns = DEFAULTNUMOFCOLUMNS)
         {
-            NumOfColumns = numOfColumns;
-            MaxNumOfTiles = NumOfColumns * NumOfColumns;
-
-            int row = 0;
-            int column = 0;
-            //int nextRow = numOfColumns - 1;
-
             if (TilesList == null)
             {
-                Random rnd = new Random();
+                if (inputNumOfColumns <= MAXNUMOFCOLUMNS && inputNumOfColumns >= MINNUMOFCOLUMNS)
+                    NumOfColumns = inputNumOfColumns;
+                else
+                    NumOfColumns = DEFAULTNUMOFCOLUMNS;
+
+                MaxNumOfTiles = NumOfColumns * NumOfColumns;
+
+                int row = 0;
+                int column = 0;
                 int nextNum = 0;
+
+                Random rnd = new Random();
                 TilesList = new List<Tile>();
 
                 for (int index = 1; index < MaxNumOfTiles; index++)
@@ -56,7 +75,7 @@ namespace BGAP.web.Client.Core
                     TilesList.Add(item);
 
                     column += 1;
-                    if (column >= numOfColumns)
+                    if (column >= NumOfColumns)
                     {
                         column = 0;
                         row += 1;
@@ -64,7 +83,7 @@ namespace BGAP.web.Client.Core
                 }
 
                 var emptyTile = new Tile();
-                emptyTile.Row = emptyTile.Column = numOfColumns - 1;
+                emptyTile.Row = emptyTile.Column = NumOfColumns - 1;
                 emptyTile.number = 0;
                 emptyTile.backgroundColor = "blackBackground";
 
@@ -74,6 +93,13 @@ namespace BGAP.web.Client.Core
             return GetAllTiles();
         }
 
+        /// <summary>
+        /// Checks if the selected tile (in the input coordinates) can be moved.
+        /// If so, it is swapped with the empty tile
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns></returns>
         public List<Tile> TryMoveTile(int row, int column)
         {
             // UP
@@ -101,6 +127,10 @@ namespace BGAP.web.Client.Core
             return GetAllTiles();
         }
 
+        /// <summary>
+        /// Restart the game
+        /// </summary>
+        /// <returns></returns>
         public List<Tile> Restart()
         {
             Done = false;
@@ -112,6 +142,11 @@ namespace BGAP.web.Client.Core
 
         #region Private Methods
 
+        /// <summary>
+        /// Sort the tiles according to thei coordinates, in order to be displayed
+        /// and returns the entire list
+        /// </summary>
+        /// <returns></returns>
         private List<Tile> GetAllTiles()
         {
             List<Tile> SortedList = new List<Tile>();
@@ -121,6 +156,13 @@ namespace BGAP.web.Client.Core
             return SortedList;
         }
 
+        /// <summary>
+        /// Move the tile currently in the position indicated by the coordinates
+        /// in the specified direction
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <param name="direction"></param>
         private void MoveTile(int row, int column, Direction direction)
         {
             Tile tmpFrom = TilesList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
@@ -176,6 +218,11 @@ namespace BGAP.web.Client.Core
             return true;
         }
 
+        /// <summary>
+        /// Swap the number of the selected tile (From) with the empty one (To)
+        /// </summary>
+        /// <param name="From"></param>
+        /// <param name="To"></param>
         private void SwapTiles(Tile From, Tile To)
         {
             int value = From.number;
