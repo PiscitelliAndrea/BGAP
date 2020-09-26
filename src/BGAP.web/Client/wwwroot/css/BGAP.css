@@ -40,3 +40,111 @@ tr.fifteenpuzzle:nth-child(even) td.chessboard:nth-child(odd) {
 .bigButton {
     font-size: 48px;
 }
+
+
+/* 2048 */
+table.g2048 {
+    margin: 80px auto;
+    border: 25px solid #BAAEA0;
+    border-collapse: collapse; /* */
+}
+
+td.g2048 {
+    width: 90px;
+    height: 90px;
+    border: 6px solid #BAAEA0; /* */
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: xx-large;
+}
+
+tr.g2048:nth-child(odd) td.chessboard:nth-child(even),
+tr.g2048:nth-child(even) td.chessboard:nth-child(odd) {
+    background: white;
+}
+
+table.g2048Buttons {
+    margin: 40px auto;
+    /*border: 12px solid #BAAEA0;*/
+    border-collapse: collapse; /* */
+}
+
+td.g2048Buttons {
+    width: 45px;
+    height: 45px;
+    /*border: 4px solid #BAAEA0;*/
+    text-align: center;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.clickable {
+    cursor: pointer;
+    color: blue;
+}
+
+
+.g2048BG_0 {
+    background: #D6CDC4;
+}
+
+.g2048BG_2 {
+    color: #776F64;
+    background: #EEE4DA;
+}
+
+.g2048BG_4 {
+    color: #776F64;
+    background: #ECE0C8;
+}
+
+.g2048BG_8 {
+    color: #F7F7ED;
+    background: #F2B179;
+}
+
+.g2048BG_16 {
+    color: #F7F7ED;
+    background: #F59563;
+}
+
+.g2048BG_32 {
+    color: #FDF3F1;
+    background: #F57C5F;
+}
+
+.g2048BG_64 {
+    color: #F7F8F1;
+    background: #F65D3B;
+}
+
+.g2048BG_128 {
+    color: #F6F5F0;
+    background: #EDCE71;
+}
+
+.g2048BG_256 {
+    color: #FBF7ED;
+    background: #EDCC61;
+}
+
+.g2048BG_512 {
+    color: #F7F6F3;
+    background: #ECC850;
+}
+
+.g2048BG_1024 {
+    color: #F7F7ED;
+    background: #F57C5F;
+}
+
+.g2048BG_2048 {
+    color: #F7F7ED;
+    background: #F57C5F;
+}
+
+.g2048BG_4096 {
+    color: #F7F7ED;
+    background: #F57C5F;
+}

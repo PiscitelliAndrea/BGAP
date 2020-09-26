@@ -12,6 +12,7 @@ namespace BGAP.web.Client.Configuration
         public static void AddServicesConfiguration(this IServiceCollection services)
         {
             services.AddTransient<TilesGenerator>();
+            services.AddTransient<NumbersManager>();
         }
     }
 }

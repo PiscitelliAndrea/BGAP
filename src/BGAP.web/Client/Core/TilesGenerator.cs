@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static BGAP.web.Client.Core.Enums;
 
 namespace BGAP.web.Client.Core
 {
@@ -59,9 +58,11 @@ namespace BGAP.web.Client.Core
 
                 for (int index = 1; index < MaxNumOfTiles; index++)
                 {
-                    var item = new Tile();
-                    item.Row = row;
-                    item.Column = column;
+                    var item = new Tile
+                    {
+                        Row = row,
+                        Column = column
+                    };
 
                     do
                     {

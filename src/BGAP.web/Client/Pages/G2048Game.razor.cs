@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BGAP.web.Client.Core;
+using System.Threading.Tasks;
 
 namespace BGAP.web.Client.Pages
 {
-    public partial class FifteenPuzzleGame : ComponentBase
+    public partial class G2048Game : ComponentBase
     {
-        #region Injections
+        #region Injection
 
         [Inject]
-        protected TilesGenerator Tiles { get; set; }
+        protected NumbersManager Numbers { get; set; }
 
         #endregion
 
@@ -20,53 +21,56 @@ namespace BGAP.web.Client.Pages
         protected Timer Timer { get; set; }
         protected bool TimerStarted = false;
 
-        protected List<Tile> tiles = new List<Tile>();
-        protected Tile tile = new Tile();
-        protected int NumOfRows = 4;
+        protected List<Number> numbers = new List<Number>();
+        protected Number number;
+
+        //private int ElapsedTime { get; set; }
         protected TimeSpan ElapsedTime = TimeSpan.FromMilliseconds(0);
 
         #endregion
 
         #region Life Cycle events
 
-        protected override void OnInitialized()
-        {
-            tiles = Tiles.GenerateTiles(NumOfRows);
-        }
+        protected override void OnInitialized() => numbers = Numbers.GenerateTwoInitialNumbers();
 
         #endregion
 
-        #region Tiles Methods
+        #region Numbers Methods
 
-        protected void ClickTile(int riga, int colonna)
+        protected async Task ClickNumber(Direction direzione)
         {
-            if (!Tiles.Done)
+            if (!Numbers.GameOver)
             {
                 if (!TimerStarted)
                 {
                     TimerStarted = true;
                     StartCounter();
-
-                    this.StateHasChanged();
                 }
 
-                tiles = Tiles.TryMoveTile(riga, colonna);
-
-                if (Tiles.Done)
-                    StopCounter();
-
+                numbers = Numbers.TryMoveNumber(direzione);
                 this.StateHasChanged();
+                await Task.Delay(400);
+
+                GetNewNumber();
+
+                if (Numbers.GameOver)
+                    StopCounter();
             }
+        }
+
+        protected void GetNewNumber()
+        {
+            if (Numbers.Moved)
+                numbers = Numbers.GenerateNewNumber();
+            this.StateHasChanged();
         }
 
         protected void Restart()
         {
-            tiles = Tiles.Restart();
-
             ResetCounter();
             TimerStarted = true;
             StartCounter();
-            
+            numbers = Numbers.Restart();
             this.StateHasChanged();
         }
 
@@ -78,9 +82,11 @@ namespace BGAP.web.Client.Pages
         {
             Timer = new Timer(new TimerCallback(_ =>
             {
+                //ElapsedTime++;
                 ElapsedTime = ElapsedTime.Add(new TimeSpan(0, 0, 1));
 
-                // Note that the following line is necessary to refresh the UI
+                // Note that the following line is necessary because otherwise
+                // Blazor would not recognize the state change and not refresh the UI
                 InvokeAsync(() =>
                 {
                     StateHasChanged();
