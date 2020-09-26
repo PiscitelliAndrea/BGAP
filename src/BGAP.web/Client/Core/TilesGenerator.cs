@@ -66,9 +66,9 @@ namespace BGAP.web.Client.Core
                     {
                         nextNum = rnd.Next(1, MaxNumOfTiles);
                     }
-                    while (TilesList.Where(n => n.Number == nextNum).Any());
+                    while (TilesList.Where(n => n.NumberValue == nextNum.ToString()).Any());
 
-                    item.Number = nextNum;
+                    item.SetNumber(nextNum);
                     item.BackgroundColor = ((nextNum % 2) == 0) ? "darkBackground" : "lightBackground";
 
                     TilesList.Add(item);
@@ -83,7 +83,7 @@ namespace BGAP.web.Client.Core
 
                 var emptyTile = new NumberTile();
                 emptyTile.Row = emptyTile.Column = NumOfColumns - 1;
-                emptyTile.Number = 0;
+                emptyTile.ClearNumber();
                 emptyTile.BackgroundColor = "blackBackground";
 
                 TilesList.Add(emptyTile);
@@ -103,22 +103,22 @@ namespace BGAP.web.Client.Core
         {
             // UP
             if (row > 0
-                && TilesList.Where(n => (n.Row == (row - 1) && n.Column == column && n.Number == 0)).Any())
+                && TilesList.Where(n => (n.Row == (row - 1) && n.Column == column && n.NumberValue == "")).Any())
             {
                 MoveTile(row, column, Direction.Up);
             }   // DOWN
             else if (row < NumOfColumns
-                && TilesList.Where(n => (n.Row == (row + 1) && n.Column == column && n.Number == 0)).Any())
+                && TilesList.Where(n => (n.Row == (row + 1) && n.Column == column && n.NumberValue == "")).Any())
             {
                 MoveTile(row, column, Direction.Down);
             }   // LEFT
             else if (column > 0
-                && TilesList.Where(n => (n.Row == row && n.Column == (column - 1) && n.Number == 0)).Any())
+                && TilesList.Where(n => (n.Row == row && n.Column == (column - 1) && n.NumberValue == "")).Any())
             {
                 MoveTile(row, column, Direction.Left);
             }   // RIGHT
             else if (column < NumOfColumns
-                && TilesList.Where(n => (n.Row == row && n.Column == (column + 1) && n.Number == 0)).Any())
+                && TilesList.Where(n => (n.Row == row && n.Column == (column + 1) && n.NumberValue == "")).Any())
             {
                 MoveTile(row, column, Direction.Right);
             }
@@ -198,17 +198,18 @@ namespace BGAP.web.Client.Core
         /// <returns></returns>
         private bool CheckSolution()
         {
-            int num = 1;
+            string num = "";
             int counter = 1;
 
             for (int row = 0; row < NumOfColumns; row++)
             {
                 for (int column = 0; column < NumOfColumns; column++)
                 {
-                    num = TilesList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().Number;
-                    if (num != counter++)
+                    num = TilesList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().NumberValue;
+                    if (num != counter.ToString())
                         return false;
-
+                    
+                    counter++;
                     if (counter > (MaxNumOfTiles - 1))
                         counter = 0;
                 }
@@ -224,11 +225,11 @@ namespace BGAP.web.Client.Core
         /// <param name="To"></param>
         private void SwapTiles(NumberTile From, NumberTile To)
         {
-            int value = From.Number;
+            string value = From.NumberValue;
             string background = From.BackgroundColor;
-            From.Number = 0;
+            From.ClearNumber();
             From.BackgroundColor = "blackBackground";
-            To.Number = value;
+            To.SetNumber(Convert.ToInt32(value));
             To.BackgroundColor = background;
         }
 

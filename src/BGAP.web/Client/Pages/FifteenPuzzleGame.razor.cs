@@ -20,8 +20,8 @@ namespace BGAP.web.Client.Pages
         protected Timer Timer { get; set; }
         protected bool TimerStarted = false;
 
-        protected List<Tile> tiles = new List<Tile>();
-        protected Tile tile = new Tile();
+        protected List<NumberTile> tiles = new List<NumberTile>();
+        protected NumberTile tile = new NumberTile();
         protected int NumOfRows = 4;
         protected TimeSpan ElapsedTime = TimeSpan.FromMilliseconds(0);
 
