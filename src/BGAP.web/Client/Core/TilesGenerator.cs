@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace BGAP.web.Client.Core
 {
-
-
     public class TilesGenerator
     {
         #region Private Constants
@@ -20,7 +18,7 @@ namespace BGAP.web.Client.Core
 
         private int NumOfColumns = 0;
         private int MaxNumOfTiles = 0;
-        private List<Tile> TilesList = null;
+        private List<NumberTile> TilesList = null;
 
         #endregion
 
@@ -38,7 +36,7 @@ namespace BGAP.web.Client.Core
         /// </summary>
         /// <param name="numOfColumns"></param>
         /// <returns></returns>
-        public List<Tile> GenerateTiles(int inputNumOfColumns = DEFAULTNUMOFCOLUMNS)
+        public List<NumberTile> GenerateTiles(int inputNumOfColumns = DEFAULTNUMOFCOLUMNS)
         {
             if (TilesList == null)
             {
@@ -54,11 +52,11 @@ namespace BGAP.web.Client.Core
                 int nextNum = 0;
 
                 Random rnd = new Random();
-                TilesList = new List<Tile>();
+                TilesList = new List<NumberTile>();
 
                 for (int index = 1; index < MaxNumOfTiles; index++)
                 {
-                    var item = new Tile
+                    var item = new NumberTile
                     {
                         Row = row,
                         Column = column
@@ -68,10 +66,10 @@ namespace BGAP.web.Client.Core
                     {
                         nextNum = rnd.Next(1, MaxNumOfTiles);
                     }
-                    while (TilesList.Where(n => n.number == nextNum).Any());
+                    while (TilesList.Where(n => n.Number == nextNum).Any());
 
-                    item.number = nextNum;
-                    item.backgroundColor = ((nextNum % 2) == 0) ? "darkBackground" : "lightBackground";
+                    item.Number = nextNum;
+                    item.BackgroundColor = ((nextNum % 2) == 0) ? "darkBackground" : "lightBackground";
 
                     TilesList.Add(item);
 
@@ -83,10 +81,10 @@ namespace BGAP.web.Client.Core
                     }
                 }
 
-                var emptyTile = new Tile();
+                var emptyTile = new NumberTile();
                 emptyTile.Row = emptyTile.Column = NumOfColumns - 1;
-                emptyTile.number = 0;
-                emptyTile.backgroundColor = "blackBackground";
+                emptyTile.Number = 0;
+                emptyTile.BackgroundColor = "blackBackground";
 
                 TilesList.Add(emptyTile);
             }
@@ -101,26 +99,26 @@ namespace BGAP.web.Client.Core
         /// <param name="row"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public List<Tile> TryMoveTile(int row, int column)
+        public List<NumberTile> TryMoveTile(int row, int column)
         {
             // UP
             if (row > 0
-                && TilesList.Where(n => (n.Row == (row - 1) && n.Column == column && n.number == 0)).Any())
+                && TilesList.Where(n => (n.Row == (row - 1) && n.Column == column && n.Number == 0)).Any())
             {
                 MoveTile(row, column, Direction.Up);
             }   // DOWN
             else if (row < NumOfColumns
-                && TilesList.Where(n => (n.Row == (row + 1) && n.Column == column && n.number == 0)).Any())
+                && TilesList.Where(n => (n.Row == (row + 1) && n.Column == column && n.Number == 0)).Any())
             {
                 MoveTile(row, column, Direction.Down);
             }   // LEFT
             else if (column > 0
-                && TilesList.Where(n => (n.Row == row && n.Column == (column - 1) && n.number == 0)).Any())
+                && TilesList.Where(n => (n.Row == row && n.Column == (column - 1) && n.Number == 0)).Any())
             {
                 MoveTile(row, column, Direction.Left);
             }   // RIGHT
             else if (column < NumOfColumns
-                && TilesList.Where(n => (n.Row == row && n.Column == (column + 1) && n.number == 0)).Any())
+                && TilesList.Where(n => (n.Row == row && n.Column == (column + 1) && n.Number == 0)).Any())
             {
                 MoveTile(row, column, Direction.Right);
             }
@@ -132,7 +130,7 @@ namespace BGAP.web.Client.Core
         /// Restart the game
         /// </summary>
         /// <returns></returns>
-        public List<Tile> Restart()
+        public List<NumberTile> Restart()
         {
             Done = false;
             TilesList = null;
@@ -148,9 +146,9 @@ namespace BGAP.web.Client.Core
         /// and returns the entire list
         /// </summary>
         /// <returns></returns>
-        private List<Tile> GetAllTiles()
+        private List<NumberTile> GetAllTiles()
         {
-            List<Tile> SortedList = new List<Tile>();
+            List<NumberTile> SortedList = new List<NumberTile>();
 
             SortedList = TilesList.Where(t => t != null).OrderBy(n => n.Row).ThenBy(n => n.Column).ToList();
 
@@ -166,9 +164,9 @@ namespace BGAP.web.Client.Core
         /// <param name="direction"></param>
         private void MoveTile(int row, int column, Direction direction)
         {
-            Tile tmpFrom = TilesList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
-            Tile tmpTo = new Tile();
-            Tile tmp = new Tile();
+            NumberTile tmpFrom = TilesList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
+            NumberTile tmpTo = new NumberTile();
+            NumberTile tmp = new NumberTile();
 
             switch (direction)
             {
@@ -207,7 +205,7 @@ namespace BGAP.web.Client.Core
             {
                 for (int column = 0; column < NumOfColumns; column++)
                 {
-                    num = TilesList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().number;
+                    num = TilesList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().Number;
                     if (num != counter++)
                         return false;
 
@@ -224,14 +222,14 @@ namespace BGAP.web.Client.Core
         /// </summary>
         /// <param name="From"></param>
         /// <param name="To"></param>
-        private void SwapTiles(Tile From, Tile To)
+        private void SwapTiles(NumberTile From, NumberTile To)
         {
-            int value = From.number;
-            string background = From.backgroundColor;
-            From.number = 0;
-            From.backgroundColor = "blackBackground";
-            To.number = value;
-            To.backgroundColor = background;
+            int value = From.Number;
+            string background = From.BackgroundColor;
+            From.Number = 0;
+            From.BackgroundColor = "blackBackground";
+            To.Number = value;
+            To.BackgroundColor = background;
         }
 
         #endregion

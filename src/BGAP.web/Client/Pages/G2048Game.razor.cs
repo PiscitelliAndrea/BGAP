@@ -21,8 +21,8 @@ namespace BGAP.web.Client.Pages
         protected Timer Timer { get; set; }
         protected bool TimerStarted = false;
 
-        protected List<Number> numbers = new List<Number>();
-        protected Number number;
+        protected List<NumberTile> numbers = new List<NumberTile>();
+        protected NumberTile number;
 
         //private int ElapsedTime { get; set; }
         protected TimeSpan ElapsedTime = TimeSpan.FromMilliseconds(0);

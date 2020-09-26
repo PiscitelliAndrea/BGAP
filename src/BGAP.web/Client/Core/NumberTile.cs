@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace BGAP.web.Client.Core
 {
-    public class Number
+    public class NumberTile
     {
         public int Row { get; set; }
         public int Column { get; set; }
-        public int number { get; set; }
-        public string backgroundColor { get; set; }
+        public int Number { get; set; }
+        public string BackgroundColor { get; set; }
 
         public string NumberValue
         {
             get
             {
-                return number != 0 ? number.ToString() : "";
+                return Number != 0 ? Number.ToString() : "";
             }
         }
     }

@@ -17,7 +17,7 @@ namespace BGAP.web.Client.Core
 
         #region Internal properties
 
-        private List<Number> NumbersList = new List<Number>();
+        private List<NumberTile> NumbersList = new List<NumberTile>();
 
         #endregion
 
@@ -31,26 +31,26 @@ namespace BGAP.web.Client.Core
 
         #region Initial Method
 
-        public List<Number> GenerateTwoInitialNumbers()
+        public List<NumberTile> GenerateTwoInitialNumbers()
         {
             if (NumbersList == null || NumbersList.Count < 1)
             {
-                NumbersList = new List<Number>();
+                NumbersList = new List<NumberTile>();
 
                 Random rnd = new Random();
 
-                var FirstItem = new Number
+                var FirstItem = new NumberTile
                 {
                     Row = rnd.Next(0, MaxNumOfRows - 1),
                     Column = rnd.Next(0, MaxNumOfColumns - 1),
 
-                    number = GetNewNumber(rnd)
+                    Number = GetNewNumber(rnd)
                 };
-                FirstItem.backgroundColor = GetBackgroundColor(FirstItem.number);
+                FirstItem.BackgroundColor = GetBackgroundColor(FirstItem.Number);
 
                 NumbersList.Add(FirstItem);
 
-                var SecondItem = new Number();
+                var SecondItem = new NumberTile();
 
                 do
                 {
@@ -59,8 +59,8 @@ namespace BGAP.web.Client.Core
                 }
                 while (SecondItem.Row == FirstItem.Row && SecondItem.Column == FirstItem.Column);
 
-                SecondItem.number = GetNewNumber(rnd);
-                SecondItem.backgroundColor = GetBackgroundColor(SecondItem.number);
+                SecondItem.Number = GetNewNumber(rnd);
+                SecondItem.BackgroundColor = GetBackgroundColor(SecondItem.Number);
 
                 NumbersList.Add(SecondItem);
 
@@ -72,13 +72,13 @@ namespace BGAP.web.Client.Core
                 {
                     if (!((row == FirstItem.Row && column == FirstItem.Column) || (row == SecondItem.Row && column == SecondItem.Column)))
                     {
-                        var item = new Number
+                        var item = new NumberTile
                         {
                             Row = row,
                             Column = column,
-                            number = 0
+                            Number = 0
                         };
-                        item.backgroundColor = GetBackgroundColor(item.number);
+                        item.BackgroundColor = GetBackgroundColor(item.Number);
 
                         NumbersList.Add(item);
                     }
@@ -99,7 +99,7 @@ namespace BGAP.web.Client.Core
 
         #region Public Methods
 
-        public List<Number> GenerateNewNumber()
+        public List<NumberTile> GenerateNewNumber()
         {
             Random rnd = new Random();
             int NewRow = -1;
@@ -110,27 +110,27 @@ namespace BGAP.web.Client.Core
                 NewRow = rnd.Next(0, MaxNumOfRows);
                 NewColumn = rnd.Next(0, MaxNumOfColumns);
             }
-            while (NumbersList.Where(n => n.Row == NewRow && n.Column == NewColumn && n.number != 0).Any());
+            while (NumbersList.Where(n => n.Row == NewRow && n.Column == NewColumn && n.Number != 0).Any());
 
-            Number NewNumber = NumbersList.Where(n => n.Row == NewRow && n.Column == NewColumn).FirstOrDefault();
-            NewNumber.number = GetNewNumber(rnd);
-            NewNumber.backgroundColor = GetBackgroundColor(NewNumber.number);
+            NumberTile NewNumber = NumbersList.Where(n => n.Row == NewRow && n.Column == NewColumn).FirstOrDefault();
+            NewNumber.Number = GetNewNumber(rnd);
+            NewNumber.BackgroundColor = GetBackgroundColor(NewNumber.Number);
 
             this.GameOver = CheckSolution();
 
             return GetNumbers();
         }
 
-        private List<Number> GetNumbers()
+        private List<NumberTile> GetNumbers()
         {
-            List<Number> SortedList = new List<Number>();
+            List<NumberTile> SortedList = new List<NumberTile>();
 
             SortedList = NumbersList.OrderBy(n => n.Row).ThenBy(n => n.Column).ToList();
 
             return SortedList;
         }
 
-        public List<Number> Restart()
+        public List<NumberTile> Restart()
         {
             GameOver = false;
             NumbersList = null;
@@ -141,7 +141,7 @@ namespace BGAP.web.Client.Core
 
         #region Movement Methods
 
-        public List<Number> TryMoveNumber(Direction direzione)
+        public List<NumberTile> TryMoveNumber(Direction direzione)
         {
             bool squashed = false;
             this.Moved = false;
@@ -186,10 +186,10 @@ namespace BGAP.web.Client.Core
                         for (int indexRow = startingRow; indexRow < MaxNumOfRows; indexRow++)
                         {
                             // Confronto la cella corrente con quella precedente
-                            Number ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
-                            Number PreviousNumber = NumbersList.Where(n => n.Row == indexRow - 1 && n.Column == indexColumn).First();
+                            NumberTile ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
+                            NumberTile PreviousNumber = NumbersList.Where(n => n.Row == indexRow - 1 && n.Column == indexColumn).First();
 
-                            if (ThisNumber.number != 0 && PreviousNumber.number == 0)
+                            if (ThisNumber.Number != 0 && PreviousNumber.Number == 0)
                             {
                                 for (int indexRowToSlide = indexRow; indexRowToSlide < MaxNumOfRows; indexRowToSlide++)
                                 {
@@ -205,10 +205,10 @@ namespace BGAP.web.Client.Core
                         for (int indexRow = MaxNumOfRows - 2; indexRow >= 0; indexRow--)
                         {
                             // Confronto la cella corrente con quella precedente
-                            Number ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
-                            Number PreviousNumber = NumbersList.Where(n => n.Row == indexRow + 1 && n.Column == indexColumn).First();
+                            NumberTile ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
+                            NumberTile PreviousNumber = NumbersList.Where(n => n.Row == indexRow + 1 && n.Column == indexColumn).First();
 
-                            if (ThisNumber.number != 0 && PreviousNumber.number == 0)
+                            if (ThisNumber.Number != 0 && PreviousNumber.Number == 0)
                             {
                                 for (int indexRowToSlide = indexRow; indexRowToSlide >= 0; indexRowToSlide--)
                                 {
@@ -240,10 +240,10 @@ namespace BGAP.web.Client.Core
                         for (int indexColumn = startingColumn; indexColumn < MaxNumOfColumns; indexColumn++)
                         {
                             // Confronto la cella corrente con quella precedente
-                            Number ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
-                            Number PreviousNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn - 1).First();
+                            NumberTile ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
+                            NumberTile PreviousNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn - 1).First();
 
-                            if (ThisNumber.number != 0 && PreviousNumber.number == 0)
+                            if (ThisNumber.Number != 0 && PreviousNumber.Number == 0)
                             {
                                 for (int indexColumnToSlide = indexColumn; indexColumnToSlide < MaxNumOfColumns; indexColumnToSlide++)
                                 {
@@ -259,10 +259,10 @@ namespace BGAP.web.Client.Core
                         for (int indexColumn = MaxNumOfColumns - 2; indexColumn >= 0; indexColumn--)
                         {
                             // Confronto la cella corrente con quella precedente
-                            Number ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
-                            Number PreviousNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn + 1).First();
+                            NumberTile ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
+                            NumberTile PreviousNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn + 1).First();
 
-                            if (ThisNumber.number != 0 && PreviousNumber.number == 0)
+                            if (ThisNumber.Number != 0 && PreviousNumber.Number == 0)
                             {
                                 for (int indexColumnToSlide = indexColumn; indexColumnToSlide >= 0; indexColumnToSlide--)
                                 {
@@ -287,18 +287,18 @@ namespace BGAP.web.Client.Core
                     for (int indexRow = 1; indexRow < MaxNumOfRows; indexRow++)
                     {
                         // Confronto la cella corrente con quella precedente
-                        Number ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
-                        Number PreviousNumber = NumbersList.Where(n => n.Row == indexRow - 1 && n.Column == indexColumn).First();
+                        NumberTile ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
+                        NumberTile PreviousNumber = NumbersList.Where(n => n.Row == indexRow - 1 && n.Column == indexColumn).First();
 
-                        if (ThisNumber.number != 0)
+                        if (ThisNumber.Number != 0)
                         {
                             // Stesso numero -> Squash
-                            if (ThisNumber.number == PreviousNumber.number)
+                            if (ThisNumber.Number == PreviousNumber.Number)
                             {
                                 SquashNumbers(indexRow, indexColumn, direction);
                                 squashed = Moved = true;
                             }
-                            else if (PreviousNumber.number == 0)
+                            else if (PreviousNumber.Number == 0)
                             {
                                 MoveNumberByColumn(indexRow, indexColumn, direction);
                                 if (!squashed)
@@ -314,18 +314,18 @@ namespace BGAP.web.Client.Core
                     for (int indexRow = MaxNumOfRows - 2; indexRow >= 0; indexRow--)
                     {
                         // Confronto la cella corrente con quella precedente
-                        Number ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
-                        Number PreviousNumber = NumbersList.Where(n => n.Row == indexRow + 1 && n.Column == indexColumn).First();
+                        NumberTile ThisNumber = NumbersList.Where(n => n.Row == indexRow && n.Column == indexColumn).First();
+                        NumberTile PreviousNumber = NumbersList.Where(n => n.Row == indexRow + 1 && n.Column == indexColumn).First();
 
-                        if (ThisNumber.number != 0)
+                        if (ThisNumber.Number != 0)
                         {
                             // Stesso numero -> Squash
-                            if (ThisNumber.number == PreviousNumber.number)
+                            if (ThisNumber.Number == PreviousNumber.Number)
                             {
                                 SquashNumbers(indexRow, indexColumn, direction);
                                 squashed = Moved = true;
                             }
-                            else if (PreviousNumber.number == 0)
+                            else if (PreviousNumber.Number == 0)
                             {
                                 MoveNumberByColumn(indexRow, indexColumn, direction);
                                 if (!squashed)
@@ -349,18 +349,18 @@ namespace BGAP.web.Client.Core
                     for (int indexColumn = 1; indexColumn < MaxNumOfRows; indexColumn++)
                     {
                         // Confronto la cella corrente con quella precedente
-                        Number ThisNumber = NumbersList.Where(n => n.Column == indexColumn && n.Row == indexRow).First();
-                        Number PreviousNumber = NumbersList.Where(n => n.Column == indexColumn - 1 && n.Row == indexRow).First();
+                        NumberTile ThisNumber = NumbersList.Where(n => n.Column == indexColumn && n.Row == indexRow).First();
+                        NumberTile PreviousNumber = NumbersList.Where(n => n.Column == indexColumn - 1 && n.Row == indexRow).First();
 
-                        if (ThisNumber.number != 0)
+                        if (ThisNumber.Number != 0)
                         {
                             // Stesso numero -> Squash
-                            if (ThisNumber.number == PreviousNumber.number)
+                            if (ThisNumber.Number == PreviousNumber.Number)
                             {
                                 SquashNumbers(indexRow, indexColumn, direction);
                                 squashed = Moved = true;
                             }
-                            else if (PreviousNumber.number == 0)
+                            else if (PreviousNumber.Number == 0)
                             {
                                 MoveNumberByRow(indexColumn, indexRow, direction);
                                 if (!squashed)
@@ -376,18 +376,18 @@ namespace BGAP.web.Client.Core
                     for (int indexColumn = MaxNumOfColumns - 2; indexColumn >= 0; indexColumn--)
                     {
                         // Confronto la cella corrente con quella precedente
-                        Number ThisNumber = NumbersList.Where(n => n.Column == indexColumn && n.Row == indexRow).First();
-                        Number PreviousNumber = NumbersList.Where(n => n.Column == indexColumn + 1 && n.Row == indexRow).First();
+                        NumberTile ThisNumber = NumbersList.Where(n => n.Column == indexColumn && n.Row == indexRow).First();
+                        NumberTile PreviousNumber = NumbersList.Where(n => n.Column == indexColumn + 1 && n.Row == indexRow).First();
 
-                        if (ThisNumber.number != 0)
+                        if (ThisNumber.Number != 0)
                         {
                             // Stesso numero -> Squash
-                            if (ThisNumber.number == PreviousNumber.number)
+                            if (ThisNumber.Number == PreviousNumber.Number)
                             {
                                 SquashNumbers(indexRow, indexColumn, direction);
                                 squashed = Moved = true;
                             }
-                            else if (PreviousNumber.number == 0)
+                            else if (PreviousNumber.Number == 0)
                             {
                                 MoveNumberByRow(indexColumn, indexRow, direction);
                                 if (!squashed)
@@ -405,9 +405,9 @@ namespace BGAP.web.Client.Core
 
         private void SquashNumbers(int row, int column, Direction direction)
         {
-            Number tmpFrom = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
-            Number tmpTo = new Number();
-            Number tmp = new Number();
+            NumberTile tmpFrom = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
+            NumberTile tmpTo = new NumberTile();
+            NumberTile tmp = new NumberTile();
 
             switch (direction)
             {
@@ -439,9 +439,9 @@ namespace BGAP.web.Client.Core
 
         private void MoveNumberByColumn(int row, int column, Direction direction)
         {
-            Number tmpFrom = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
-            Number tmpTo = new Number();
-            Number tmp = new Number();
+            NumberTile tmpFrom = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
+            NumberTile tmpTo = new NumberTile();
+            NumberTile tmp = new NumberTile();
 
             switch (direction)
             {
@@ -459,9 +459,9 @@ namespace BGAP.web.Client.Core
 
         private void MoveNumberByRow(int row, int column, Direction direction)
         {
-            Number tmpFrom = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
-            Number tmpTo = new Number();
-            Number tmp = new Number();
+            NumberTile tmpFrom = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault();
+            NumberTile tmpTo = new NumberTile();
+            NumberTile tmp = new NumberTile();
 
             switch (direction)
             {
@@ -487,7 +487,7 @@ namespace BGAP.web.Client.Core
             {
                 for (int column = 0; column < 4; column++)
                 {
-                    if (NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().number == 0)
+                    if (NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().Number == 0)
                         return false;
                 }
             }
@@ -502,8 +502,8 @@ namespace BGAP.web.Client.Core
             {
                 for (int column = 0; column < MaxNumOfColumns - 1; column++)
                 {
-                    int Num1 = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().number;
-                    int Num2 = NumbersList.Where(n => n.Row == row && n.Column == column + 1).FirstOrDefault().number;
+                    int Num1 = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().Number;
+                    int Num2 = NumbersList.Where(n => n.Row == row && n.Column == column + 1).FirstOrDefault().Number;
 
                     if (Num1 == Num2)
                         return false;
@@ -515,8 +515,8 @@ namespace BGAP.web.Client.Core
             {
                 for (int row = 0; row < MaxNumOfRows - 1; row++)
                 {
-                    int Num1 = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().number;
-                    int Num2 = NumbersList.Where(n => n.Row == row + 1 && n.Column == column).FirstOrDefault().number;
+                    int Num1 = NumbersList.Where(n => n.Row == row && n.Column == column).FirstOrDefault().Number;
+                    int Num2 = NumbersList.Where(n => n.Row == row + 1 && n.Column == column).FirstOrDefault().Number;
 
                     if (Num1 == Num2)
                         return false;
@@ -526,22 +526,22 @@ namespace BGAP.web.Client.Core
             return true;
         }
 
-        private void SquashNumbers(Number From, Number Into)
+        private void SquashNumbers(NumberTile From, NumberTile Into)
         {
-            Into.number += From.number;
-            From.number = 0;
-            From.backgroundColor = GetBackgroundColor(From.number);
-            Into.backgroundColor = GetBackgroundColor(Into.number);
+            Into.Number += From.Number;
+            From.Number = 0;
+            From.BackgroundColor = GetBackgroundColor(From.Number);
+            Into.BackgroundColor = GetBackgroundColor(Into.Number);
 
-            Score += Into.number;
+            Score += Into.Number;
         }
 
-        private void MoveTiles(Number From, Number To)
+        private void MoveTiles(NumberTile From, NumberTile To)
         {
-            To.number = From.number;
-            From.number = 0;
-            From.backgroundColor = GetBackgroundColor(From.number);
-            To.backgroundColor = GetBackgroundColor(To.number);
+            To.Number = From.Number;
+            From.Number = 0;
+            From.BackgroundColor = GetBackgroundColor(From.Number);
+            To.BackgroundColor = GetBackgroundColor(To.Number);
         }
 
         private int GetNewNumber(Random rnd)

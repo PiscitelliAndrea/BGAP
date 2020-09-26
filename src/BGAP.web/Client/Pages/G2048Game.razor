@@ -23,7 +23,7 @@ else
                                     number = numbers.Where(n => n.Row == riga && n.Column == column).FirstOrDefault();
                                     int indexR = number.Row;
                                     int indexC = number.Column;
-                                    string sfondo = number.backgroundColor;
+                                    string sfondo = number.BackgroundColor;
                                     <td class="g2048 @sfondo">
                                         @number.NumberValue
                                     </td>
