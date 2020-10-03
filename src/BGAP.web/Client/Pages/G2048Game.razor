@@ -1,0 +1,71 @@
+﻿@page "/G2048Game"
+
+<h1 class="text-center">2048 Puzzle</h1>
+<p class="text-center">2048</p>
+<h4 class="text-center">by Andrea Piscitelli</h4>
+<br />
+@if (numbers.Count < 1)
+{
+    <p><em>One moment please...</em></p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <table class="g2048 mt-0 pt-0 mb-0">
+                    <tbody>
+                        @for (int riga = 0; riga < 4; riga++)
+                        {
+                            <tr class="g2048">
+                                @for (int column = 0; column < 4; column++)
+                                {
+                                    number = numbers.Where(n => n.Row == riga && n.Column == column).FirstOrDefault();
+                                    int indexR = number.Row;
+                                    int indexC = number.Column;
+                                    string sfondo = number.BackgroundColor;
+                                    <td class="g2048 @sfondo">
+                                        @number.NumberValue
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (ElapsedTime.TotalSeconds > 0)
+                {
+                    <h2 class="text-center">Score: @Numbers.Score.ToString() - Moves: @Numbers.Moves.ToString() - @ElapsedTime</h2>
+                }
+                @if (Numbers.GameOver)
+                {
+                    <div class="text-center mt-1 pt-1">
+                        <h3>GAME OVER!</h3>
+                        <span class="oi oi-reload btn btn-lg pointer" aria-hidden="true" @onclick="() => Restart()"></span>
+                    </div>
+                }
+
+            </div>
+            <div class="col-2">
+                <table class="g2048Buttons mt-0 pt-0 mb-0">
+                    <tbody>
+                        <tr class="g2048Buttons">
+                            <td class="g2048Buttons">&nbsp;</td>
+                            <td class="g2048Buttons clickable" @onclick="() => ClickNumber(Direction.Up)"><span class="oi oi-caret-top" data-inline="false"></span></td>
+                            <td class="g2048Buttons">&nbsp;</td>    
+                        </tr>
+                        <tr class="g2048Buttons">
+                            <td class="g2048Buttons clickable" @onclick="() => ClickNumber(Direction.Left)"><span class="oi oi-caret-left" data-inline="false"></span></td>
+                            <td class="g2048Buttons">&nbsp;</td>
+                            <td class="g2048Buttons clickable" @onclick="() => ClickNumber(Direction.Right)"><span class="oi oi-caret-right" data-inline="false"></span></td>
+                        </tr>
+                        <tr class="g2048">
+                            <td class="g2048Buttons">&nbsp;</td>
+                            <td class="g2048Buttons clickable" @onclick="() => ClickNumber(Direction.Down)"><span class="oi oi-caret-bottom" data-inline="false"></span></td>
+                            <td class="g2048Buttons">&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

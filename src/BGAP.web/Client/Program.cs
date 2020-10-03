@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using BGAP.web.Client.Core;
+using BGAP.web.Client.Configuration;
 
 namespace BGAP.web.Client
 {
@@ -18,6 +20,8 @@ namespace BGAP.web.Client
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            ServicesConfiguration.AddServicesConfiguration(builder.Services);
 
             await builder.Build().RunAsync();
         }

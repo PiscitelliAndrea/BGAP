@@ -1,0 +1,44 @@
+﻿@page "/FifteenPuzzleGame"
+
+<h1 class="text-center">Fifteen Puzzle</h1>
+<p class="text-center">Il gioco del Quindici</p>
+<h4 class="text-center">by Andrea Piscitelli</h4>
+<br />
+@if (tiles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="fifteenpuzzle mt-0 pt-0 mb-0">
+        <tbody>
+            @for (int riga = 0; riga < NumOfRows; riga++)
+            {
+                <tr class="fifteenpuzzle">
+                    @for (int column = 0; column < NumOfRows; column++)
+                    {
+                        tile = tiles.Where(n => n.Row == riga && n.Column == column).FirstOrDefault();
+                        int indexR = tile.Row;
+                        int indexC = tile.Column;
+                        string sfondo = tile.BackgroundColor;
+                        <td class="fifteenpuzzle @sfondo" @onclick="() => ClickTile(indexR, indexC)">
+                            @tile.NumberValue
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (ElapsedTime.TotalSeconds > 0)
+    {
+        <h2 class="text-center">Moves: @Tiles.Moves.ToString() - @ElapsedTime</h2>
+    }
+
+    if (Tiles.Done)
+    {
+        <div class="text-center mt-1 pt-1">
+            <h3>Well Done!</h3>
+            <span class="oi oi-reload btn btn-lg pointer" aria-hidden="true" @onclick="() => Restart()"></span>
+        </div>
+    }
+}
