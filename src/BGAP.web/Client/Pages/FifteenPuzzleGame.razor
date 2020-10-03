@@ -31,14 +31,14 @@ else
     </table>
     @if (ElapsedTime.TotalSeconds > 0)
     {
-        <h2 class="text-center">@ElapsedTime</h2>
+        <h2 class="text-center">Moves: @Tiles.Moves.ToString() - @ElapsedTime</h2>
     }
 
     if (Tiles.Done)
     {
         <div class="text-center mt-1 pt-1">
             <h3>Well Done!</h3>
-            <span class="oi oi-reload btn btn-dark btn-lg bigButton darkBackground pointer" aria-hidden="true" @onclick="() => Restart()"></span>
+            <span class="oi oi-reload btn btn-lg pointer" aria-hidden="true" @onclick="() => Restart()"></span>
         </div>
     }
 }

@@ -23,13 +23,14 @@ namespace BGAP.web.Client.Core
 
         #region Public properties
 
-        public int Score = 0;
-        public bool Moved = false;
-        public bool GameOver = false;
+        public int Score { get; set; } = 0;
+        public int Moves { get; set; } = 0;
+        public bool Moved { get; set; } = false;
+        public bool GameOver { get; set; } = false;
 
         #endregion
 
-        #region Initial Method
+        #region Public Methods
 
         public List<NumberTile> GenerateTwoInitialNumbers()
         {
@@ -95,10 +96,6 @@ namespace BGAP.web.Client.Core
             return GetNumbers();
         }
 
-        #endregion
-
-        #region Public Methods
-
         public List<NumberTile> GenerateNewNumber()
         {
             Random rnd = new Random();
@@ -151,7 +148,7 @@ namespace BGAP.web.Client.Core
             if (direzione == Direction.Up || direzione == Direction.Down)
                 for (int indexColumn = 0; indexColumn < MaxNumOfColumns; indexColumn++)
                 {
-                    this.Moved |= CompactColumn(indexColumn, direzione);
+                    this.Moved |= SquashColumn(indexColumn, direzione);
                     this.Moved |= MergeColumn(indexColumn, direzione, ref squashed);
                 }
 
@@ -160,9 +157,12 @@ namespace BGAP.web.Client.Core
             if (direzione == Direction.Left || direzione == Direction.Right)
                 for (int indexRow = 0; indexRow < MaxNumOfRows; indexRow++)
                 {
-                    this.Moved |= CompactRow(indexRow, direzione);
+                    this.Moved |= SquashRow(indexRow, direzione);
                     this.Moved |= MergeRow(indexRow, direzione, ref squashed);
                 }
+
+            if (Moved)
+                Moves++;
 
             return GetNumbers();
         }
@@ -171,7 +171,7 @@ namespace BGAP.web.Client.Core
 
         #region Internal Methods
 
-        private bool CompactColumn(int indexColumn, Direction direzione, int startingRow = 1)
+        private bool SquashColumn(int indexColumn, Direction direzione, int startingRow = 1)
         {
             bool moved = false;
             bool done = false;
@@ -225,7 +225,7 @@ namespace BGAP.web.Client.Core
             return moved;
         }
 
-        private bool CompactRow(int indexRow, Direction direzione, int startingColumn = 1)
+        private bool SquashRow(int indexRow, Direction direzione, int startingColumn = 1)
         {
             bool moved = false;
             bool done = false;
@@ -414,25 +414,25 @@ namespace BGAP.web.Client.Core
                 case Direction.Up:
                     tmpTo = NumbersList.Where(n => n.Row == (row - 1) && n.Column == column).FirstOrDefault();
                     SquashNumbers(tmpFrom, tmpTo);
-                    CompactColumn(column, direction, tmpFrom.Row);
+                    SquashColumn(column, direction, tmpFrom.Row);
                     break;
 
                 case Direction.Down:
                     tmpTo = NumbersList.Where(n => n.Row == (row + 1) && n.Column == column).FirstOrDefault();
                     SquashNumbers(tmpFrom, tmpTo);
-                    CompactColumn(column, direction, tmpFrom.Row);
+                    SquashColumn(column, direction, tmpFrom.Row);
                     break;
 
                 case Direction.Left:
                     tmpTo = NumbersList.Where(n => n.Row == row && n.Column == (column - 1)).FirstOrDefault();
                     SquashNumbers(tmpFrom, tmpTo);
-                    CompactRow(row, direction, tmpFrom.Column);
+                    SquashRow(row, direction, tmpFrom.Column);
                     break;
 
                 case Direction.Right:
                     tmpTo = NumbersList.Where(n => n.Row == row && n.Column == (column + 1)).FirstOrDefault();
                     SquashNumbers(tmpFrom, tmpTo);
-                    CompactRow(row, direction, tmpFrom.Column);
+                    SquashRow(row, direction, tmpFrom.Column);
                     break;
             }
         }

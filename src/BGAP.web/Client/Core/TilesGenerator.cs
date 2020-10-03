@@ -25,6 +25,7 @@ namespace BGAP.web.Client.Core
         #region Public Properties
 
         public bool Done { get; set; }
+        public int Moves { get; set; } = 0;
 
         #endregion
 
@@ -231,6 +232,8 @@ namespace BGAP.web.Client.Core
             From.BackgroundColor = "blackBackground";
             To.SetNumber(Convert.ToInt32(value));
             To.BackgroundColor = background;
+
+            Moves++;
         }
 
         #endregion
